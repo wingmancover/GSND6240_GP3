@@ -1033,6 +1033,7 @@ GameObject:
   m_Component:
   - component: {fileID: 230958963}
   - component: {fileID: 230958964}
+  - component: {fileID: 230958965}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -1081,6 +1082,23 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.9, z: 0}
+--- !u!114 &230958965
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 230958962}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32dae749b3f68cb42b555a53a834cda8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  forwardSpeed: 8
+  laneOffset: 2.2
+  laneChangeSpeed: 12
+  currentLane: 1
+  gravity: -20
 --- !u!43 &347121421
 Mesh:
   m_ObjectHideFlags: 0
