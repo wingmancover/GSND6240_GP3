@@ -8,7 +8,7 @@ public class PlayerLaneRunner : MonoBehaviour
     public float forwardSpeed = 8f;
 
     [Header("Lane Movement")]
-    public float laneOffset = 2.2f;
+    public float laneOffset = 3.5f;
     public float laneChangeSpeed = 12f;
     public int currentLane = 1; // 0 = left, 1 = middle, 2 = right
 
@@ -62,5 +62,13 @@ public class PlayerLaneRunner : MonoBehaviour
 
         Vector3 move = new Vector3(moveX, verticalVelocity, forwardSpeed);
         controller.Move(move * Time.deltaTime);
+    }
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if (hit.gameObject.GetComponent<Obstacle>() != null)
+        {
+            Debug.Log("Hit obstacle!");
+        }
     }
 }
