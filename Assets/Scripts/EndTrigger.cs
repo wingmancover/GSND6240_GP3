@@ -7,6 +7,11 @@ public class EndTrigger : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             Debug.Log("Level Complete!");
+
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.CompleteLevel();
+            }
         }
     }
 }
