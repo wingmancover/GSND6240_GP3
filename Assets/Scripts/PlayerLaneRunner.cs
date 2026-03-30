@@ -25,6 +25,12 @@ public class PlayerLaneRunner : MonoBehaviour
 
     private void Update()
     {
+        if (GameManager.Instance == null || !GameManager.Instance.IsPlaying())
+        {
+            ApplyGroundedGravityOnly();
+            return;
+        }
+
         HandleLaneInput();
         HandleMovement();
     }
@@ -62,6 +68,17 @@ public class PlayerLaneRunner : MonoBehaviour
 
         Vector3 move = new Vector3(moveX, verticalVelocity, forwardSpeed);
         controller.Move(move * Time.deltaTime);
+    }
+
+    private void ApplyGroundedGravityOnly()
+    {
+        if (controller.isGrounded && verticalVelocity < 0f)
+        {
+            verticalVelocity = -2f;
+        }
+
+        verticalVelocity += gravity * Time.deltaTime;
+        controller.Move(new Vector3(0f, verticalVelocity, 0f) * Time.deltaTime);
     }
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
