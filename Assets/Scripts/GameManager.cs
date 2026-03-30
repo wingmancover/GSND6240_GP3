@@ -40,7 +40,7 @@ public class GameManager : MonoBehaviour
     {
         if (CurrentState == GameState.StartScreen)
         {
-            if (Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame)
+            if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
             {
                 StartGame();
             }
