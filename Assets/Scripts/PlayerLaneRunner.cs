@@ -12,6 +12,9 @@ public class PlayerLaneRunner : MonoBehaviour
     public float laneChangeSpeed = 12f;
     public int currentLane = 1; // 0 = left, 1 = middle, 2 = right
 
+    [Header("Jump Settings")]
+    public float jumpForce = 8f;
+
     [Header("Gravity")]
     public float gravity = -20f;
 
@@ -32,6 +35,7 @@ public class PlayerLaneRunner : MonoBehaviour
         }
 
         HandleLaneInput();
+        HandleJumpInput();
         HandleMovement();
     }
 
@@ -50,6 +54,19 @@ public class PlayerLaneRunner : MonoBehaviour
                 currentLane++;
                 currentLane = Mathf.Clamp(currentLane, 0, 2);
             }
+        }
+    }
+
+    private void HandleJumpInput()
+    {
+        if (Keyboard.current == null)
+        {
+            return;
+        }
+
+        if (Keyboard.current.spaceKey.wasPressedThisFrame && controller.isGrounded)
+        {
+            verticalVelocity = jumpForce;
         }
     }
 
