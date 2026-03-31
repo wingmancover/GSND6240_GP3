@@ -83,9 +83,11 @@ public class PlayerLaneRunner : MonoBehaviour
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        if (hit.gameObject.GetComponent<Obstacle>() != null)
+        Obstacle obstacle = hit.gameObject.GetComponent<Obstacle>();
+
+        if (obstacle != null)
         {
-            Debug.Log("Hit obstacle!");
+            Debug.Log("Hit obstacle type: " + obstacle.obstacleType);
         }
     }
 }

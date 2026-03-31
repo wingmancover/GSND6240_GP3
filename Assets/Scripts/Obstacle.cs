@@ -2,5 +2,6 @@ using UnityEngine;
 
 public class Obstacle : MonoBehaviour
 {
-    // Marker script for now
+    [Header("Obstacle Settings")]
+    public ObstacleType obstacleType = ObstacleType.LaneBlocker;
 }
