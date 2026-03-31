@@ -1243,6 +1243,13 @@ MonoBehaviour:
   currentLane: 1
   jumpForce: 8
   gravity: -24
+  standingHeight: 1.8
+  crouchingHeight: 1
+  standingCenterY: 0.9
+  crouchingCenterY: 0.5
+  standingCameraY: 1.27
+  crouchingCameraY: 0.57
+  crouchTransitionSpeed: 12
 --- !u!43 &312426506
 Mesh:
   m_ObjectHideFlags: 0

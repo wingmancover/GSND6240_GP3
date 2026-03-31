@@ -16,27 +16,54 @@ public class PlayerLaneRunner : MonoBehaviour
     public float jumpForce = 8f;
 
     [Header("Gravity")]
-    public float gravity = -20f;
+    public float gravity = -24f;
+
+    [Header("Crouch Settings")]
+    public float standingHeight = 1.8f;
+    public float crouchingHeight = 1.0f;
+    public float standingCenterY = 0.9f;
+    public float crouchingCenterY = 0.5f;
+    public float standingCameraY = 1.27f;
+    public float crouchingCameraY = 0.57f;
+    public float crouchTransitionSpeed = 12f;
 
     private CharacterController controller;
     private float verticalVelocity;
 
+    private Camera playerCamera;
+    private bool isCrouching = false;
+
     private void Awake()
     {
         controller = GetComponent<CharacterController>();
+        playerCamera = GetComponentInChildren<Camera>();
+
+        controller.height = standingHeight;
+        controller.center = new Vector3(0f, standingCenterY, 0f);
+
+        if (playerCamera != null)
+        {
+            Vector3 camPos = playerCamera.transform.localPosition;
+            camPos.y = standingCameraY;
+            playerCamera.transform.localPosition = camPos;
+        }
     }
 
     private void Update()
     {
+        HandleCrouchState();
+
         if (GameManager.Instance == null || !GameManager.Instance.IsPlaying())
         {
             ApplyGroundedGravityOnly();
+            UpdateCrouchVisuals();
             return;
         }
 
         HandleLaneInput();
         HandleJumpInput();
         HandleMovement();
+        UpdateCrouchVisuals();
     }
 
     private void HandleLaneInput()
@@ -64,10 +91,20 @@ public class PlayerLaneRunner : MonoBehaviour
             return;
         }
 
-        if (Keyboard.current.spaceKey.wasPressedThisFrame && controller.isGrounded)
+        if (Keyboard.current.spaceKey.wasPressedThisFrame && controller.isGrounded && !isCrouching)
         {
             verticalVelocity = jumpForce;
         }
+    }
+
+    private void HandleCrouchState()
+    {
+        if (Keyboard.current == null)
+        {
+            return;
+        }
+
+        isCrouching = Keyboard.current.sKey.isPressed;
     }
 
     private void HandleMovement()
@@ -96,6 +133,26 @@ public class PlayerLaneRunner : MonoBehaviour
 
         verticalVelocity += gravity * Time.deltaTime;
         controller.Move(new Vector3(0f, verticalVelocity, 0f) * Time.deltaTime);
+    }
+
+    private void UpdateCrouchVisuals()
+    {
+        float targetHeight = isCrouching ? crouchingHeight : standingHeight;
+        float targetCenterY = isCrouching ? crouchingCenterY : standingCenterY;
+        float targetCameraY = isCrouching ? crouchingCameraY : standingCameraY;
+
+        controller.height = Mathf.Lerp(controller.height, targetHeight, crouchTransitionSpeed * Time.deltaTime);
+
+        Vector3 center = controller.center;
+        center.y = Mathf.Lerp(center.y, targetCenterY, crouchTransitionSpeed * Time.deltaTime);
+        controller.center = center;
+
+        if (playerCamera != null)
+        {
+            Vector3 camPos = playerCamera.transform.localPosition;
+            camPos.y = Mathf.Lerp(camPos.y, targetCameraY, crouchTransitionSpeed * Time.deltaTime);
+            playerCamera.transform.localPosition = camPos;
+        }
     }
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
