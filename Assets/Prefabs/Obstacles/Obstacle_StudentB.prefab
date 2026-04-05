@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7519138479398444876}
   - component: {fileID: 8874235666969154757}
   m_Layer: 0
-  m_Name: Obstacle_StudentXiwa 1
+  m_Name: Obstacle_StudentB
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -29,7 +29,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 3.5, y: 1.109, z: -5.434}
-  m_LocalScale: {x: 0.14682563, y: 0.14682563, z: 0.14682563}
+  m_LocalScale: {x: 0.10735222, y: 0.10735222, z: 0.10735222}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -78,7 +78,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: bbcf4296b5ff5ec4bb84dda2d9f02251, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 803827e00106fc240b3f100c1e9b4ffd, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
