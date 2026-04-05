@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,12 +10,14 @@ public class GameManager : MonoBehaviour
     {
         StartScreen,
         Playing,
-        LevelComplete
+        LevelComplete,
+        GameOver
     }
 
     [Header("UI References")]
     public GameObject startScreenUI;
     public GameObject endScreenUI;
+    public GameObject gameOverScreenUI;
 
     public GameState CurrentState { get; private set; }
 
@@ -38,11 +41,23 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        if (Mouse.current == null)
+        {
+            return;
+        }
+
         if (CurrentState == GameState.StartScreen)
         {
-            if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
+            if (Mouse.current.leftButton.wasPressedThisFrame)
             {
                 StartGame();
+            }
+        }
+        else if (CurrentState == GameState.GameOver)
+        {
+            if (Mouse.current.leftButton.wasPressedThisFrame)
+            {
+                RestartLevel();
             }
         }
     }
@@ -57,6 +72,16 @@ public class GameManager : MonoBehaviour
         SetState(GameState.LevelComplete);
     }
 
+    public void TriggerGameOver()
+    {
+        SetState(GameState.GameOver);
+    }
+
+    public void RestartLevel()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
     private void SetState(GameState newState)
     {
         CurrentState = newState;
@@ -69,6 +94,11 @@ public class GameManager : MonoBehaviour
         if (endScreenUI != null)
         {
             endScreenUI.SetActive(CurrentState == GameState.LevelComplete);
+        }
+
+        if (gameOverScreenUI != null)
+        {
+            gameOverScreenUI.SetActive(CurrentState == GameState.GameOver);
         }
     }
 
