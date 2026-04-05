@@ -491,7 +491,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8573726482396456115, guid: 5ffcc9c496fe01c4eae789eb8175c3f3, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.771
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8573726482396456115, guid: 5ffcc9c496fe01c4eae789eb8175c3f3, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1334,6 +1334,10 @@ MonoBehaviour:
   standingCameraY: 1.27
   crouchingCameraY: 0.57
   crouchTransitionSpeed: 12
+  maxHits: 4
+  invincibilityDuration: 3
+  hitShakeDuration: 0.6
+  hitShakeMagnitude: 0.15
 --- !u!1001 &266386269
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2352,7 +2356,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8573726482396456115, guid: 5ffcc9c496fe01c4eae789eb8175c3f3, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.771
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8573726482396456115, guid: 5ffcc9c496fe01c4eae789eb8175c3f3, type: 3}
       propertyPath: m_LocalPosition.z
@@ -4263,7 +4267,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8573726482396456115, guid: 5ffcc9c496fe01c4eae789eb8175c3f3, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.771
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8573726482396456115, guid: 5ffcc9c496fe01c4eae789eb8175c3f3, type: 3}
       propertyPath: m_LocalPosition.z
@@ -4393,6 +4397,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 1784663066}
+    - target: {fileID: 8064733532965956098, guid: c7cd4d1162563ca43888655bb9d6e0a2, type: 3}
+      propertyPath: m_Convex
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9127756512439740105, guid: c7cd4d1162563ca43888655bb9d6e0a2, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.5
@@ -6399,7 +6407,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startScreenUI: {fileID: 1866108197}
   endScreenUI: {fileID: 765586795}
-  gameOverScreenUI: {fileID: 0}
+  gameOverScreenUI: {fileID: 1667793387}
 --- !u!1001 &1973029149
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6878,7 +6886,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8573726482396456115, guid: 5ffcc9c496fe01c4eae789eb8175c3f3, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.771
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8573726482396456115, guid: 5ffcc9c496fe01c4eae789eb8175c3f3, type: 3}
       propertyPath: m_LocalPosition.z

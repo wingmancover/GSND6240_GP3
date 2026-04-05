@@ -6,12 +6,12 @@ public class PlayerLaneRunner : MonoBehaviour
 {
     [Header("Forward Movement")]
     public float baseForwardSpeed = 7f;
-    public float maxForwardSpeed = 10f;
+    public float maxForwardSpeed = 11f;
 
     [Header("Speed Ramp")]
     public float speedIncreaseStartDelay = 10f;
     public float speedIncreaseAmount = 0.2f;
-    public float speedIncreaseInterval = 1f;
+    public float speedIncreaseInterval = 0.7f;
 
     [Header("Lane Movement")]
     public float laneOffset = 2.5f;
@@ -33,6 +33,13 @@ public class PlayerLaneRunner : MonoBehaviour
     public float crouchingCameraY = 0.57f;
     public float crouchTransitionSpeed = 12f;
 
+    [Header("Hit / Game Over Settings")]
+    public int maxHits = 4;
+    public float invincibilityDuration = 3f;
+    public float hitShakeDuration = 0.6f;
+    public float hitShakeMagnitude = 0.08f;
+
+
     private CharacterController controller;
     private float verticalVelocity;
 
@@ -42,6 +49,12 @@ public class PlayerLaneRunner : MonoBehaviour
     private float currentForwardSpeed;
     private float gameplayTimer;
     private float speedIncreaseTimer;
+
+    private int currentHitCount = 0;
+    private bool isInvincible = false;
+    private float invincibilityTimer = 0f;
+
+    private float shakeTimer = 0f;
 
     private void Awake()
     {
@@ -54,7 +67,9 @@ public class PlayerLaneRunner : MonoBehaviour
         if (playerCamera != null)
         {
             Vector3 camPos = playerCamera.transform.localPosition;
+            camPos.x = 0f;
             camPos.y = standingCameraY;
+            camPos.z = 0f;
             playerCamera.transform.localPosition = camPos;
         }
 
@@ -66,11 +81,12 @@ public class PlayerLaneRunner : MonoBehaviour
     private void Update()
     {
         HandleCrouchState();
+        UpdateInvincibilityTimer();
 
         if (GameManager.Instance == null || !GameManager.Instance.IsPlaying())
         {
             ApplyGroundedGravityOnly();
-            UpdateCrouchVisuals();
+            UpdateCrouchAndCamera();
             return;
         }
 
@@ -79,7 +95,7 @@ public class PlayerLaneRunner : MonoBehaviour
         HandleLaneInput();
         HandleJumpInput();
         HandleMovement();
-        UpdateCrouchVisuals();
+        UpdateCrouchAndCamera();
     }
 
     private void HandleLaneInput()
@@ -145,8 +161,6 @@ public class PlayerLaneRunner : MonoBehaviour
             currentForwardSpeed += speedIncreaseAmount;
             currentForwardSpeed = Mathf.Min(currentForwardSpeed, maxForwardSpeed);
             speedIncreaseTimer = 0f;
-
-            Debug.Log("Current Forward Speed: " + currentForwardSpeed);
         }
     }
 
@@ -178,7 +192,23 @@ public class PlayerLaneRunner : MonoBehaviour
         controller.Move(new Vector3(0f, verticalVelocity, 0f) * Time.deltaTime);
     }
 
-    private void UpdateCrouchVisuals()
+    private void UpdateInvincibilityTimer()
+    {
+        if (!isInvincible)
+        {
+            return;
+        }
+
+        invincibilityTimer -= Time.deltaTime;
+
+        if (invincibilityTimer <= 0f)
+        {
+            isInvincible = false;
+            invincibilityTimer = 0f;
+        }
+    }
+
+    private void UpdateCrouchAndCamera()
     {
         float targetHeight = isCrouching ? crouchingHeight : standingHeight;
         float targetCenterY = isCrouching ? crouchingCenterY : standingCenterY;
@@ -192,19 +222,68 @@ public class PlayerLaneRunner : MonoBehaviour
 
         if (playerCamera != null)
         {
+            if (shakeTimer > 0f)
+            {
+                shakeTimer -= Time.deltaTime;
+            }
+
+            float shakeX = 0f;
+            float shakeY = 0f;
+
+            if (shakeTimer > 0f)
+            {
+                shakeX = Random.Range(-hitShakeMagnitude, hitShakeMagnitude);
+                shakeY = Random.Range(-hitShakeMagnitude, hitShakeMagnitude);
+            }
+
             Vector3 camPos = playerCamera.transform.localPosition;
-            camPos.y = Mathf.Lerp(camPos.y, targetCameraY, crouchTransitionSpeed * Time.deltaTime);
+            camPos.x = Mathf.Lerp(camPos.x, shakeX, crouchTransitionSpeed * Time.deltaTime);
+            camPos.y = Mathf.Lerp(camPos.y, targetCameraY + shakeY, crouchTransitionSpeed * Time.deltaTime);
+            camPos.z = 0f;
             playerCamera.transform.localPosition = camPos;
+        }
+    }
+
+    private void RegisterHit(Obstacle obstacle)
+    {
+        if (isInvincible)
+        {
+            return;
+        }
+
+        isInvincible = true;
+        invincibilityTimer = invincibilityDuration;
+
+        currentHitCount++;
+        shakeTimer = hitShakeDuration;
+
+        Debug.Log("Hit obstacle type: " + obstacle.obstacleType);
+        Debug.Log("Current hit count: " + currentHitCount + " / " + maxHits);
+
+        if (currentHitCount >= maxHits)
+        {
+            isInvincible = false;
+            invincibilityTimer = 0f;
+
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.TriggerGameOver();
+            }
         }
     }
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
+        if (GameManager.Instance == null || !GameManager.Instance.IsPlaying())
+        {
+            return;
+        }
+
         Obstacle obstacle = hit.gameObject.GetComponent<Obstacle>();
 
         if (obstacle != null)
         {
-            Debug.Log("Hit obstacle type: " + obstacle.obstacleType);
+            RegisterHit(obstacle);
         }
     }
 }
