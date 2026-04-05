@@ -5,7 +5,13 @@ using UnityEngine.InputSystem;
 public class PlayerLaneRunner : MonoBehaviour
 {
     [Header("Forward Movement")]
-    public float forwardSpeed = 7f;
+    public float baseForwardSpeed = 7f;
+    public float maxForwardSpeed = 10f;
+
+    [Header("Speed Ramp")]
+    public float speedIncreaseStartDelay = 10f;
+    public float speedIncreaseAmount = 0.2f;
+    public float speedIncreaseInterval = 1f;
 
     [Header("Lane Movement")]
     public float laneOffset = 2.5f;
@@ -33,6 +39,10 @@ public class PlayerLaneRunner : MonoBehaviour
     private Camera playerCamera;
     private bool isCrouching = false;
 
+    private float currentForwardSpeed;
+    private float gameplayTimer;
+    private float speedIncreaseTimer;
+
     private void Awake()
     {
         controller = GetComponent<CharacterController>();
@@ -47,6 +57,10 @@ public class PlayerLaneRunner : MonoBehaviour
             camPos.y = standingCameraY;
             playerCamera.transform.localPosition = camPos;
         }
+
+        currentForwardSpeed = baseForwardSpeed;
+        gameplayTimer = 0f;
+        speedIncreaseTimer = 0f;
     }
 
     private void Update()
@@ -59,6 +73,8 @@ public class PlayerLaneRunner : MonoBehaviour
             UpdateCrouchVisuals();
             return;
         }
+
+        UpdateSpeedRamp();
 
         HandleLaneInput();
         HandleJumpInput();
@@ -107,6 +123,33 @@ public class PlayerLaneRunner : MonoBehaviour
         isCrouching = Keyboard.current.sKey.isPressed;
     }
 
+    private void UpdateSpeedRamp()
+    {
+        gameplayTimer += Time.deltaTime;
+
+        if (gameplayTimer < speedIncreaseStartDelay)
+        {
+            return;
+        }
+
+        if (currentForwardSpeed >= maxForwardSpeed)
+        {
+            currentForwardSpeed = maxForwardSpeed;
+            return;
+        }
+
+        speedIncreaseTimer += Time.deltaTime;
+
+        if (speedIncreaseTimer >= speedIncreaseInterval)
+        {
+            currentForwardSpeed += speedIncreaseAmount;
+            currentForwardSpeed = Mathf.Min(currentForwardSpeed, maxForwardSpeed);
+            speedIncreaseTimer = 0f;
+
+            Debug.Log("Current Forward Speed: " + currentForwardSpeed);
+        }
+    }
+
     private void HandleMovement()
     {
         float targetX = (currentLane - 1) * laneOffset;
@@ -120,7 +163,7 @@ public class PlayerLaneRunner : MonoBehaviour
 
         verticalVelocity += gravity * Time.deltaTime;
 
-        Vector3 move = new Vector3(moveX, verticalVelocity, forwardSpeed);
+        Vector3 move = new Vector3(moveX, verticalVelocity, currentForwardSpeed);
         controller.Move(move * Time.deltaTime);
     }
 
