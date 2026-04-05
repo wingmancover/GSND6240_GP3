@@ -5,10 +5,10 @@ using UnityEngine.InputSystem;
 public class PlayerLaneRunner : MonoBehaviour
 {
     [Header("Forward Movement")]
-    public float forwardSpeed = 8f;
+    public float forwardSpeed = 7f;
 
     [Header("Lane Movement")]
-    public float laneOffset = 3.5f;
+    public float laneOffset = 2.5f;
     public float laneChangeSpeed = 12f;
     public int currentLane = 1; // 0 = left, 1 = middle, 2 = right
 
