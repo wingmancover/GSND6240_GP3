@@ -37,6 +37,11 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         SetState(GameState.StartScreen);
+
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlayStartUISound();
+        }
     }
 
     private void Update()
@@ -64,6 +69,12 @@ public class GameManager : MonoBehaviour
 
     public void StartGame()
     {
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.StopStartUISound();
+            AudioManager.Instance.PlayBGM();
+        }
+
         SetState(GameState.Playing);
     }
 
@@ -74,6 +85,11 @@ public class GameManager : MonoBehaviour
 
     public void TriggerGameOver()
     {
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.StopBGM();
+        }
+
         SetState(GameState.GameOver);
     }
 

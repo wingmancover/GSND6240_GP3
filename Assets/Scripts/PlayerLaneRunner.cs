@@ -106,12 +106,22 @@ public class PlayerLaneRunner : MonoBehaviour
             {
                 currentLane--;
                 currentLane = Mathf.Clamp(currentLane, 0, 2);
+
+                if (AudioManager.Instance != null)
+                {
+                    AudioManager.Instance.PlayWhoosh();
+                }
             }
 
             if (Keyboard.current.dKey.wasPressedThisFrame)
             {
                 currentLane++;
                 currentLane = Mathf.Clamp(currentLane, 0, 2);
+
+                if (AudioManager.Instance != null)
+                {
+                    AudioManager.Instance.PlayWhoosh();
+                }
             }
         }
     }
@@ -126,6 +136,11 @@ public class PlayerLaneRunner : MonoBehaviour
         if (Keyboard.current.spaceKey.wasPressedThisFrame && controller.isGrounded && !isCrouching)
         {
             verticalVelocity = jumpForce;
+
+            if (AudioManager.Instance != null)
+            {
+                AudioManager.Instance.PlayJump();
+            }
         }
     }
 
@@ -134,6 +149,14 @@ public class PlayerLaneRunner : MonoBehaviour
         if (Keyboard.current == null)
         {
             return;
+        }
+
+        if (Keyboard.current.sKey.wasPressedThisFrame)
+        {
+            if (AudioManager.Instance != null)
+            {
+                AudioManager.Instance.PlayJump();
+            }
         }
 
         isCrouching = Keyboard.current.sKey.isPressed;
@@ -256,6 +279,11 @@ public class PlayerLaneRunner : MonoBehaviour
 
         currentHitCount++;
         shakeTimer = hitShakeDuration;
+
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlayHitObstacle();
+        }
 
         Debug.Log("Hit obstacle type: " + obstacle.obstacleType);
         Debug.Log("Current hit count: " + currentHitCount + " / " + maxHits);
