@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class SideDoorObstacleEvent : MonoBehaviour
+public class SideDoorPatrolObstacleEvent : MonoBehaviour
 {
     public enum DoorOpenAxis
     {
@@ -14,7 +14,7 @@ public class SideDoorObstacleEvent : MonoBehaviour
     public Transform player;
     public Transform doorPivot;
     public Transform obstacle;
-    public Transform targetPoint;
+    public Transform entryPoint;
 
     [Header("Trigger Settings")]
     public float triggerDistanceZ = 12f;
@@ -24,17 +24,25 @@ public class SideDoorObstacleEvent : MonoBehaviour
     public float openAngle = 90f;
     public float doorOpenSpeed = 180f;
 
-    [Header("Obstacle Movement")]
-    public float obstacleMoveSpeed = 8f;
+    [Header("Obstacle Entry")]
+    public float obstacleMoveToEntrySpeed = 8f;
     public float obstacleMoveDelay = 0.15f;
+
+    [Header("Patrol Settings")]
+    public float leftPatrolX = -2.5f;
+    public float rightPatrolX = 2.5f;
+    public float patrolSpeed = 5f;
 
     private bool hasTriggered = false;
     private bool isOpeningDoor = false;
-    private bool isMovingObstacle = false;
+    private bool isMovingToEntry = false;
+    private bool isPatrolling = false;
 
     private Vector3 closedLocalEuler;
     private float closedAxisAngle;
     private float targetAxisAngle;
+
+    private int patrolDirection = 1; // 1 = right, -1 = left
 
     private void Start()
     {
@@ -51,7 +59,8 @@ public class SideDoorObstacleEvent : MonoBehaviour
         if (hasTriggered)
         {
             UpdateDoorOpening();
-            UpdateObstacleMovement();
+            UpdateMoveToEntry();
+            UpdatePatrol();
             return;
         }
 
@@ -60,7 +69,7 @@ public class SideDoorObstacleEvent : MonoBehaviour
             return;
         }
 
-        if (player == null || doorPivot == null || obstacle == null || targetPoint == null)
+        if (player == null || doorPivot == null || obstacle == null || entryPoint == null)
         {
             return;
         }
@@ -83,7 +92,7 @@ public class SideDoorObstacleEvent : MonoBehaviour
     private IEnumerator BeginObstacleMoveAfterDelay()
     {
         yield return new WaitForSeconds(obstacleMoveDelay);
-        isMovingObstacle = true;
+        isMovingToEntry = true;
     }
 
     private void UpdateDoorOpening()
@@ -112,24 +121,53 @@ public class SideDoorObstacleEvent : MonoBehaviour
         }
     }
 
-    private void UpdateObstacleMovement()
+    private void UpdateMoveToEntry()
     {
-        if (!isMovingObstacle || obstacle == null || targetPoint == null)
+        if (!isMovingToEntry || obstacle == null || entryPoint == null)
         {
             return;
         }
 
         obstacle.position = Vector3.MoveTowards(
             obstacle.position,
-            targetPoint.position,
-            obstacleMoveSpeed * Time.deltaTime
+            entryPoint.position,
+            obstacleMoveToEntrySpeed * Time.deltaTime
         );
 
-        if (Vector3.Distance(obstacle.position, targetPoint.position) < 0.01f)
+        if (Vector3.Distance(obstacle.position, entryPoint.position) < 0.01f)
         {
-            obstacle.position = targetPoint.position;
-            isMovingObstacle = false;
+            obstacle.position = entryPoint.position;
+            isMovingToEntry = false;
+            isPatrolling = true;
+
+            float distanceToLeft = Mathf.Abs(obstacle.position.x - leftPatrolX);
+            float distanceToRight = Mathf.Abs(obstacle.position.x - rightPatrolX);
+            patrolDirection = distanceToRight < distanceToLeft ? -1 : 1;
         }
+    }
+
+    private void UpdatePatrol()
+    {
+        if (!isPatrolling || obstacle == null)
+        {
+            return;
+        }
+
+        Vector3 pos = obstacle.position;
+        pos.x += patrolDirection * patrolSpeed * Time.deltaTime;
+
+        if (pos.x >= rightPatrolX)
+        {
+            pos.x = rightPatrolX;
+            patrolDirection = -1;
+        }
+        else if (pos.x <= leftPatrolX)
+        {
+            pos.x = leftPatrolX;
+            patrolDirection = 1;
+        }
+
+        obstacle.position = pos;
     }
 
     private float GetAxisValue(Vector3 euler)
