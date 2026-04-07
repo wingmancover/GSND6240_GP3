@@ -1413,10 +1413,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseForwardSpeed: 7
-  maxForwardSpeed: 12
+  maxForwardSpeed: 11
   speedIncreaseStartDelay: 10
   speedIncreaseAmount: 0.3
-  speedIncreaseInterval: 0.5
+  speedIncreaseInterval: 1
   laneOffset: 2.5
   laneChangeSpeed: 12
   currentLane: 1
