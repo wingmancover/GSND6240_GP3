@@ -13,12 +13,11 @@ public class GameManager : MonoBehaviour
         StartScreen,
         Playing,
         LevelCompleteSequence,
-        GameOver
+        GameOverSequence
     }
 
     [Header("UI References")]
     public GameObject startScreenUI;
-    public GameObject gameOverScreenUI;
     public GameObject hitUI;
 
     [Header("Hit UI")]
@@ -35,9 +34,17 @@ public class GameManager : MonoBehaviour
     public float backgroundFadeDuration = 0.75f;
     public float completeFadeDuration = 0.5f;
 
+    [Header("Game Over Sequence")]
+    public GameObject gameOverSequenceRoot;
+    public Image gameOverBlackImage;
+    public Image gameOverArtImage;
+    public GameObject gameOverClickText;
+    public float gameOverImageFadeDuration = 0.5f;
+
     public GameState CurrentState { get; private set; }
 
     private bool canClickToQuit = false;
+    private bool canClickToRestart = false;
 
     private void Awake()
     {
@@ -62,6 +69,7 @@ public class GameManager : MonoBehaviour
         }
 
         ResetLevelCompleteUI();
+        ResetGameOverUI();
 
         if (AudioManager.Instance != null)
         {
@@ -83,7 +91,7 @@ public class GameManager : MonoBehaviour
                 StartGame();
             }
         }
-        else if (CurrentState == GameState.GameOver)
+        else if (CurrentState == GameState.GameOverSequence && canClickToRestart)
         {
             if (Mouse.current.leftButton.wasPressedThisFrame)
             {
@@ -128,12 +136,18 @@ public class GameManager : MonoBehaviour
 
     public void TriggerGameOver()
     {
+        if (CurrentState != GameState.Playing)
+        {
+            return;
+        }
+
         if (AudioManager.Instance != null)
         {
             AudioManager.Instance.StopBGM();
         }
 
-        SetState(GameState.GameOver);
+        SetState(GameState.GameOverSequence);
+        StartCoroutine(PlayGameOverSequence());
     }
 
     public void RestartLevel()
@@ -172,11 +186,6 @@ public class GameManager : MonoBehaviour
             startScreenUI.SetActive(CurrentState == GameState.StartScreen);
         }
 
-        if (gameOverScreenUI != null)
-        {
-            gameOverScreenUI.SetActive(CurrentState == GameState.GameOver);
-        }
-
         if (hitUI != null)
         {
             hitUI.SetActive(CurrentState == GameState.Playing);
@@ -185,6 +194,11 @@ public class GameManager : MonoBehaviour
         if (levelCompleteSequenceRoot != null)
         {
             levelCompleteSequenceRoot.SetActive(CurrentState == GameState.LevelCompleteSequence);
+        }
+
+        if (gameOverSequenceRoot != null)
+        {
+            gameOverSequenceRoot.SetActive(CurrentState == GameState.GameOverSequence);
         }
     }
 
@@ -202,6 +216,24 @@ public class GameManager : MonoBehaviour
         SetImageAlpha(endCompleteImage, 0f);
     }
 
+    private void ResetGameOverUI()
+    {
+        canClickToRestart = false;
+
+        if (gameOverSequenceRoot != null)
+        {
+            gameOverSequenceRoot.SetActive(false);
+        }
+
+        SetImageAlpha(gameOverBlackImage, 1f);
+        SetImageAlpha(gameOverArtImage, 0f);
+
+        if (gameOverClickText != null)
+        {
+            gameOverClickText.SetActive(false);
+        }
+    }
+
     private IEnumerator PlayLevelCompleteSequence()
     {
         canClickToQuit = false;
@@ -216,6 +248,26 @@ public class GameManager : MonoBehaviour
         yield return FadeImage(endCompleteImage, 0f, 1f, completeFadeDuration);
 
         canClickToQuit = true;
+    }
+
+    private IEnumerator PlayGameOverSequence()
+    {
+        canClickToRestart = false;
+
+        if (gameOverSequenceRoot != null)
+        {
+            gameOverSequenceRoot.SetActive(true);
+        }
+
+        SetImageAlpha(gameOverBlackImage, 1f);
+        yield return FadeImage(gameOverArtImage, 0f, 1f, gameOverImageFadeDuration);
+
+        if (gameOverClickText != null)
+        {
+            gameOverClickText.SetActive(true);
+        }
+
+        canClickToRestart = true;
     }
 
     private IEnumerator FadeImage(Image image, float fromAlpha, float toAlpha, float duration)
