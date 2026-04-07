@@ -132,6 +132,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SideObstacle
       objectReference: {fileID: 0}
+    - target: {fileID: 1724923349229980560, guid: 6d070f01ebc75fa499226734fc0a5441, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: e91a7595c8fafef43a290d567f95924c, type: 3}
     - target: {fileID: 4274873944934851381, guid: 6d070f01ebc75fa499226734fc0a5441, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.107352234
