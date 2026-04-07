@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class SideDoorPatrolObstacleEvent : MonoBehaviour
 {
+    [Header("Audio")]
+    public AudioSource doorAudioSource;
+
     public enum DoorOpenAxis
     {
         X,
@@ -86,6 +89,12 @@ public class SideDoorPatrolObstacleEvent : MonoBehaviour
     {
         hasTriggered = true;
         isOpeningDoor = true;
+
+        if (doorAudioSource != null && !doorAudioSource.isPlaying)
+        {
+            doorAudioSource.Play();
+        }
+
         StartCoroutine(BeginObstacleMoveAfterDelay());
     }
 
