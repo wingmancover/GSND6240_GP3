@@ -280,6 +280,11 @@ public class PlayerLaneRunner : MonoBehaviour
         currentHitCount++;
         shakeTimer = hitShakeDuration;
 
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.UpdateHitUI(currentHitCount);
+        }
+
         if (AudioManager.Instance != null)
         {
             AudioManager.Instance.PlayHitObstacle();

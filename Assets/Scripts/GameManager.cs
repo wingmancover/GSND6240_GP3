@@ -18,6 +18,8 @@ public class GameManager : MonoBehaviour
     public GameObject startScreenUI;
     public GameObject endScreenUI;
     public GameObject gameOverScreenUI;
+    public GameObject hitUI;
+    public HitUIController hitUIController;
 
     public GameState CurrentState { get; private set; }
 
@@ -37,6 +39,11 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         SetState(GameState.StartScreen);
+
+        if (hitUIController != null)
+        {
+            hitUIController.ResetHearts();
+        }
 
         if (AudioManager.Instance != null)
         {
@@ -98,6 +105,14 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
+    public void UpdateHitUI(int hitCount)
+    {
+        if (hitUIController != null)
+        {
+            hitUIController.UpdateHearts(hitCount);
+        }
+    }
+
     private void SetState(GameState newState)
     {
         CurrentState = newState;
@@ -115,6 +130,12 @@ public class GameManager : MonoBehaviour
         if (gameOverScreenUI != null)
         {
             gameOverScreenUI.SetActive(CurrentState == GameState.GameOver);
+        }
+
+        if (hitUI != null)
+        {
+            bool showHitUI = CurrentState == GameState.Playing;
+            hitUI.SetActive(showHitUI);
         }
     }
 
