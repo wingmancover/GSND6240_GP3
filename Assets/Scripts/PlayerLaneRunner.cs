@@ -80,7 +80,6 @@ public class PlayerLaneRunner : MonoBehaviour
 
     private void Update()
     {
-        HandleCrouchState();
         UpdateInvincibilityTimer();
 
         if (GameManager.Instance == null || !GameManager.Instance.IsPlaying())
@@ -90,6 +89,7 @@ public class PlayerLaneRunner : MonoBehaviour
             return;
         }
 
+        HandleCrouchState();
         UpdateSpeedRamp();
 
         HandleLaneInput();
