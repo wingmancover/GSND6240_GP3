@@ -425,6 +425,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 230958963}
     - target: {fileID: 1118283958979389311, guid: 9b844586d466f7f4fa6519452bff4a3d, type: 3}
+      propertyPath: patrolSpeed
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1118283958979389311, guid: 9b844586d466f7f4fa6519452bff4a3d, type: 3}
       propertyPath: triggerDistanceZ
       value: 30
       objectReference: {fileID: 0}
@@ -1637,6 +1641,10 @@ PrefabInstance:
     - target: {fileID: 6136932770340510455, guid: 603e01b495644394f812b2d0c2d227b2, type: 3}
       propertyPath: leftPatrolX
       value: -2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6136932770340510455, guid: 603e01b495644394f812b2d0c2d227b2, type: 3}
+      propertyPath: patrolSpeed
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 6136932770340510455, guid: 603e01b495644394f812b2d0c2d227b2, type: 3}
       propertyPath: rightPatrolX
@@ -3465,6 +3473,10 @@ PrefabInstance:
       value: -2.5
       objectReference: {fileID: 0}
     - target: {fileID: 1118283958979389311, guid: 9b844586d466f7f4fa6519452bff4a3d, type: 3}
+      propertyPath: patrolSpeed
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1118283958979389311, guid: 9b844586d466f7f4fa6519452bff4a3d, type: 3}
       propertyPath: triggerDistanceZ
       value: 30
       objectReference: {fileID: 0}
@@ -4582,6 +4594,10 @@ PrefabInstance:
       value: -2.5
       objectReference: {fileID: 0}
     - target: {fileID: 6136932770340510455, guid: 603e01b495644394f812b2d0c2d227b2, type: 3}
+      propertyPath: patrolSpeed
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6136932770340510455, guid: 603e01b495644394f812b2d0c2d227b2, type: 3}
       propertyPath: rightPatrolX
       value: 2.5
       objectReference: {fileID: 0}
@@ -4658,6 +4674,10 @@ PrefabInstance:
     - target: {fileID: 6136932770340510455, guid: 603e01b495644394f812b2d0c2d227b2, type: 3}
       propertyPath: leftPatrolX
       value: -2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6136932770340510455, guid: 603e01b495644394f812b2d0c2d227b2, type: 3}
+      propertyPath: patrolSpeed
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6136932770340510455, guid: 603e01b495644394f812b2d0c2d227b2, type: 3}
       propertyPath: rightPatrolX
