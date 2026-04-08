@@ -7,14 +7,17 @@ public class AudioManager : MonoBehaviour
     [Header("Audio Sources")]
     public AudioSource bgmSource;
     public AudioSource uiSource;
+    public AudioSource uiSecondarySource;
     public AudioSource sfxSource;
 
     [Header("Clips")]
     public AudioClip bgmClip;
     public AudioClip hungryStomachClip;
+    public AudioClip startUIExtraClip;
     public AudioClip whooshClip;
     public AudioClip jumpClip;
     public AudioClip hitObstacleClip;
+    public AudioClip levelCompleteClip;
 
     private void Awake()
     {
@@ -28,21 +31,33 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    public void PlayStartUISound()
+    public void PlayStartUISounds()
     {
-        if (uiSource == null || hungryStomachClip == null)
-            return;
+        if (uiSource != null && hungryStomachClip != null)
+        {
+            uiSource.clip = hungryStomachClip;
+            uiSource.loop = false;
+            uiSource.Play();
+        }
 
-        uiSource.clip = hungryStomachClip;
-        uiSource.loop = true;
-        uiSource.Play();
+        if (uiSecondarySource != null && startUIExtraClip != null)
+        {
+            uiSecondarySource.clip = startUIExtraClip;
+            uiSecondarySource.loop = false;
+            uiSecondarySource.Play();
+        }
     }
 
-    public void StopStartUISound()
+    public void StopStartUISounds()
     {
         if (uiSource != null && uiSource.isPlaying)
         {
             uiSource.Stop();
+        }
+
+        if (uiSecondarySource != null && uiSecondarySource.isPlaying)
+        {
+            uiSecondarySource.Stop();
         }
     }
 
@@ -85,6 +100,14 @@ public class AudioManager : MonoBehaviour
     public void PlayHitObstacle()
     {
         PlayOneShotOnSFX(hitObstacleClip);
+    }
+
+    public void PlayLevelComplete()
+    {
+        if (uiSecondarySource == null || levelCompleteClip == null)
+            return;
+
+        uiSecondarySource.PlayOneShot(levelCompleteClip);
     }
 
     private void PlayOneShotOnSFX(AudioClip clip)

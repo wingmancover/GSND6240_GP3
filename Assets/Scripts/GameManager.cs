@@ -73,7 +73,7 @@ public class GameManager : MonoBehaviour
 
         if (AudioManager.Instance != null)
         {
-            AudioManager.Instance.PlayStartUISound();
+            AudioManager.Instance.PlayStartUISounds();
         }
     }
 
@@ -111,7 +111,7 @@ public class GameManager : MonoBehaviour
     {
         if (AudioManager.Instance != null)
         {
-            AudioManager.Instance.StopStartUISound();
+            AudioManager.Instance.StopStartUISounds();
             AudioManager.Instance.PlayBGM();
         }
 
@@ -245,6 +245,12 @@ public class GameManager : MonoBehaviour
 
         yield return FadeImage(fadeBlackImage, 0f, 1f, fadeDuration);
         yield return FadeImage(endBackgroundImage, 0f, 1f, backgroundFadeDuration);
+
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlayLevelComplete();
+        }
+
         yield return FadeImage(endCompleteImage, 0f, 1f, completeFadeDuration);
 
         canClickToQuit = true;
