@@ -128,6 +128,7 @@ public class GameManager : MonoBehaviour
         if (AudioManager.Instance != null)
         {
             AudioManager.Instance.StopBGM();
+            AudioManager.Instance.PlayComplete();
         }
 
         SetState(GameState.LevelCompleteSequence);

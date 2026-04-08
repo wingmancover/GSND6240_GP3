@@ -18,6 +18,7 @@ public class AudioManager : MonoBehaviour
     public AudioClip jumpClip;
     public AudioClip hitObstacleClip;
     public AudioClip levelCompleteClip;
+    public AudioClip completeClip;
 
     private void Awake()
     {
@@ -108,6 +109,14 @@ public class AudioManager : MonoBehaviour
             return;
 
         uiSecondarySource.PlayOneShot(levelCompleteClip);
+    }
+
+    public void PlayComplete()
+    {
+        if (uiSource == null || completeClip == null)
+            return;
+
+        uiSource.PlayOneShot(completeClip);
     }
 
     private void PlayOneShotOnSFX(AudioClip clip)

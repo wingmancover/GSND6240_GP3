@@ -1982,6 +1982,7 @@ MonoBehaviour:
   jumpClip: {fileID: 8300000, guid: 9ad0608731eb2724e9d7665df05616ad, type: 3}
   hitObstacleClip: {fileID: 8300000, guid: aba0373b81ceea04b86e3124bb159c1b, type: 3}
   levelCompleteClip: {fileID: 8300000, guid: 76b80593c5412cb42986b6e747d9211b, type: 3}
+  completeClip: {fileID: 8300000, guid: 18c1a8e3302da8a4f816667a172ba02e, type: 3}
 --- !u!82 &402559461
 AudioSource:
   m_ObjectHideFlags: 0
